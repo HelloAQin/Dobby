@@ -31,17 +31,18 @@ jobs:
     steps:
     - name: checkout master
       uses: actions/checkout@master
+      
+    - name: Checkout specific commit
+      run: git checkout 0932d69
 
     - name: init linux cross compile env
       run: |
-        git checkout 0932d69
         sh scripts/setup_linux_cross_compile.sh
         mkdir -p artifact
       shell: bash
     
     - name: compile android
       run: |
-        git checkout 0932d69
         python3 scripts/platform_builder.py --platform=android --arch=all --cmake_dir=$HOME/opt/cmake-$CMAKE_VERSION --llvm_dir=$HOME/opt/llvm-$LLVM_VERSION --android_ndk_dir=$HOME/opt/ndk-$NDK_VERSION
         cp include/dobby.h build/android
         tar -zcvf build/dobby-android-all.tar.gz build/android
